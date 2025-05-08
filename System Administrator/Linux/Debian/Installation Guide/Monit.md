@@ -40,7 +40,7 @@ set httpd port 2812 and
 
 This will enable web interface to monitor it.
 
-access via http://127.0.0.1:2812
+access via <http://127.0.0.1:2812>
 
 > :information_source: Please not change your IP follow the configuration file.
 
