@@ -143,9 +143,9 @@ To manage `NGINX` and automatically certificate with UI, run this command to ins
 bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/master/install.sh) install
 ```
 
-you can access `NGINX-UI` with url http://ip.address:9000
+you can access `NGINX-UI` with url <http://ip.address:9000>
 
-site configuration will manage by `NGINX-UI` you can re-issue certificate or config certificate use for netbox site. when everything done you can access by url https://ip.address
+site configuration will manage by `NGINX-UI` you can re-issue certificate or config certificate use for netbox site. when everything done you can access by url <https://ip.address>
 
 ## Referrences
 
