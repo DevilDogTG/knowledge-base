@@ -89,8 +89,8 @@ Before install, you need to set up `apt` repository. `containerd.io` packages ar
 
 ```shell
 # Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl runc
+sudo apt update
+sudo apt install -y ca-certificates curl runc gpg
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -102,9 +102,16 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 Then install `containerd.io` package
 
 ```shell
-sudo apt-get update
-sudo apt-get install containerd.io
+sudo apt update
+sudo apt install -y containerd.io
 ```
+
+> **Note:**
+> If you installed containerd from a package (for example, RPM or `.deb`), you may find that the CRI integration plugin is disabled by default.
+> 
+> You need CRI support enabled to use containerd with Kubernetes. Make sure that cri is not included in the `disabled_plugins` list within `/etc/containerd/config.toml`; if you made > changes to that file, also restart `containerd`.
+> 
+> If you experience container crash loops after the initial cluster installation or after installing a CNI, the containerd configuration provided with the package might contain incompatible configuration parameters. Consider resetting the containerd configuration with `containerd config default > /etc/containerd/config.toml` as specified in [getting-started.md](https://github.com/containerd/containerd/blob/main/docs/getting-started.md#advanced-topics) and then set the configuration parameters specified above accordingly.
 
 After installed need to configuring the `systemd` cgroup driver
 
@@ -137,27 +144,38 @@ Restart `conatinerd` to take effect
 sudo systemctl restart containerd.service
 ```
 
+
 ### Install Kubernetes with deployment tools
 
 This install will install Kubenetes v1.31, start with add `apt` source
 
-```shell
-sudo apt-get update
-# apt-transport-https may be a dummy package; if so, you can skip that package
-sudo apt-get install -y apt-transport-https ca-certificates curl gpg
-# If the directory `/etc/apt/keyrings` does not exist, it should be created before the curl command, read the note below.
-# sudo mkdir -p -m 755 /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+Specified version to stick with
 
-# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```sh
+KUBERNETES_VERSION=v1.32
+CRIO_VERSION=v1.32
+```
+
+
+```sh
+# Add the Kubernetes repository
+curl -fsSL https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+# Add the CRI-O repository
+curl -fsSL https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/cri-o.list
 ```
 
 Update `apt` package index, install tools and pin their version
+```shell
+sudo apt update
+sudo apt install -y kubelet kubeadm
+sudo apt-mark hold kubelet kubeadm
+```
 
 ```shell
-sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt update
+sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
@@ -187,6 +205,7 @@ if output show nodes list, everything is ok
 
 ### Install network plugin **Calico**
 
+https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
 after initialed cluster your can see running pods in system by
 
 ```shell
@@ -198,7 +217,9 @@ You will see `coredns` will stuck in `Pending` state. you need to install pod ne
 to install `calico` Download the Calico networking manifest for the Kubernetes API datastore
 
 ```shell
-curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml -O
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/calico.yaml -O
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/tigera-operator.yaml -O
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/custom-resources.yaml -O
 ```
 
 if you are using pod CIDR `192.168.0.0/16` you can skip to the next step, for me changing pod CIDR to `10.244.0.0/16` need to update `CALICO_IPV4POOL_CIDR` before install
@@ -211,6 +232,8 @@ nano calico.yaml
 Apply the manifest:
 
 ```shell
+kubectl create -f tigera-operator.yaml
+kubectl create -f custom-resource.yaml
 kubectl apply -f calico.yaml
 ```
 
