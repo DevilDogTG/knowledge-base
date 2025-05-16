@@ -147,13 +147,13 @@ sudo systemctl restart containerd.service
 
 ### Install Kubernetes with deployment tools
 
-This install will install Kubenetes v1.31, start with add `apt` source
+This install will install Kubenetes v1.33, start with add `apt` source
 
 Specified version to stick with
 
 ```sh
-KUBERNETES_VERSION=v1.32
-CRIO_VERSION=v1.32
+KUBERNETES_VERSION=v1.33
+CRIO_VERSION=v1.33
 ```
 
 
