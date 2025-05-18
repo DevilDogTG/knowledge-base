@@ -1,10 +1,10 @@
-# Kubernetes Control Plant setup
+# Kubernetes Control Plane setup
 
 This guide has pre-required from [Kuberbnetes Setup Guide](Kubernetes%20Setup%20Guide.md) please completed it before follow this guide
 
 ## Getting Started
 
-In this document will focused steps to setup `Control Plant` only
+In this document will focused steps to setup `Control Plane` only
 
 - Install Kubernetes with deployment tools
 - Setup kubernetes cluster
