@@ -23,6 +23,7 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 ```
 
 Update `apt` package index, install tools and pin their version
+
 ```shell
 sudo apt update
 sudo apt install -y kubelet kubeadm
@@ -37,4 +38,10 @@ Worker node need to join running command to join cluster
 sudo kubeadm join [MASTER_NODE_IP]:6443 --token [TOKEN] --discovery-token-ca-cert-hash [HASH]
 ```
 
-If join successfule please check cluster nodes has been `READ` by usin `kubectl`
+If join successful please check cluster nodes has been `READ` by using `kubectl`
+
+After join just for clearify in furture you can mark node as a work by using:
+
+```sh
+kubectl label node <node name> node-role.kubernetes.io/worker=""
+```

@@ -65,7 +65,7 @@ if output show nodes list, everything is ok
 
 ### Install network plugin **Calico**
 
-https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
+[Calico Quickstart](https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart)
 after initialed cluster your can see running pods in system by
 
 ```shell
@@ -109,7 +109,7 @@ kubeadm token create --print-join-command
 
 Use output run on worker node to join the cluster
 
-then you can check new nodes has join 
+then you can check new nodes has joined
 
 ```shell
 kubectl get nodes -o wide
