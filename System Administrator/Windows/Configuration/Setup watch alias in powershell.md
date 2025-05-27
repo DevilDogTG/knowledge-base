@@ -15,7 +15,7 @@ add you custom function:
 ```powershell
 function watch {
     param (
-        [int]$interval,
+        [int]$interval = 5,
         [Parameter(ValueFromRemainingArguments = $true)]
         [string[]]$command
     )
@@ -25,13 +25,33 @@ function watch {
         return
     }
 
+    $prevLineCount = 0
+
     while ($true) {
-        cls
+        [Console]::SetCursorPosition(0, 0)
+
         try {
-            Invoke-Expression ($command -join " ")
+            # Capture output in memory
+            $output = Invoke-Expression ($command -join " ") | Out-String
+            $lines = $output -split "`r?`n"
+
+            # Write each line
+            foreach ($line in $lines) {
+                Write-Host $line
+            }
+
+            # Clear leftover lines from previous run
+            if ($lines.Count -lt $prevLineCount) {
+                for ($i = 0; $i -lt ($prevLineCount - $lines.Count); $i++) {
+                    Write-Host (" " * [Console]::WindowWidth)
+                }
+            }
+
+            $prevLineCount = $lines.Count
         } catch {
-            Write-Host "❌ Error running command: $_"
+            Write-Host "`n❌ Error: $_"
         }
+
         Start-Sleep -Seconds $interval
     }
 }
