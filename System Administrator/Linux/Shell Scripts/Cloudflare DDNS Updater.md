@@ -1,4 +1,4 @@
-# DDNS Updater via shell scrript
+# Cloudflare DDNS Updater via shell scrript
 
 ref: [https://dev.to/ordigital/cloudflare-ddns-on-linux-4p0d](Referrence)
 
@@ -49,7 +49,7 @@ fi
 ```
 
 replace `DNS_ZONE_ID` from `zone id` in cloudflare domain dashboard
-`DNS_ENTRY_ID` can get from cloudflare api https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-list-dns-records
+`DNS_ENTRY_ID` can get from cloudflare api [https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-list-dns-records](Cloudflare API)
 `YOUR_TOKEN_HERE` create with permission `Zone.Edit`
 
 call cloudflare
