@@ -4,7 +4,7 @@ After installed debian. this recommend to setup
 
 ## Make user admin priviledge by `sudo`
 
-Install package useful to manage 
+Install package useful to manage
 
 ``` shell
 apt install -y net-tools sudo curl
@@ -72,6 +72,12 @@ add `[username] ALL=(ALL) NOPASSWD:ALL` to allow sudo without re-enter password
 
 ```shell
 usename ALL=(ALL)   NOPASSWD:ALL
+```
+
+If you running on user has `sudo` priviledge you can use command to update your profile to use `sudo` without password
+
+```sh
+sudo bash -c "echo '$USER ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$USER && chmod 0440 /etc/sudoers.d/$USER"
 ```
 
 ### Remove account login with password
