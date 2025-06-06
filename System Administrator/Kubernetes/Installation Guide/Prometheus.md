@@ -15,7 +15,9 @@ metadata:
 
 ## Create Persistant Volume and Claims
 
-Create persistant volumn by using nfs create the yml file:
+To store Prometheus data persistently, we use an NFS-backed PersistentVolume (PV) and PersistentVolumeClaim (PVC).
+
+Persistant Volumn:
 
 ```yml
 apiVersion: v1
@@ -40,7 +42,11 @@ spec:
   persistentVolumeReclaimPolicy: Retain
 ```
 
+> Note: The `namespace` field is not required for PersistentVolumes, as they are cluster-scoped resources.
+
 Then create `pvc` to claims persistant volumn for pod use:
+
+Persistant Volumn Claim:
 
 ```yml
 apiVersion: v1
@@ -58,105 +64,118 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  selectors:
-    matchLabels:
-      app: prometheus
-      type: nfs
 ```
 
-In example I specified `selectors` to ensure `pv` to selected.
+> **Tip**: The selector ensures the PVC binds to the correct PV.
 
 ## Setup `Prometheus`
 
-We have 3 steps sperately with `config`, `deployment` and `service`. Let's start with `config`
+We will create a ConfigMap, Deployment, and Service for Prometheus.
 
-```yml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: prometheus-config
-  namespace: monitoring
-  labels:
-    app: prometheus
-data:
-  prometheus.yml: |
-    global:
-      scrape_interval: 15s
-      evaluation_interval: 15s
+1. **ConfigMap**
 
-    scrape_configs:
-      - job_name: 'prometheus'
-        static_configs:
-          - targets: ['localhost:9090']
-```
+    Stores the Prometheus configuration file (`prometheus.yml`):
 
-it use as `prometheus.yml` to configure prometheus, we need to assigned this config to every pod with `deployment`
-
-```yml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: prometheus
-  namespace: monitoring
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: prometheus
-  template:
+    ```yml
+    apiVersion: v1
+    kind: ConfigMap
     metadata:
-      labels:
+    name: prometheus-config
+    namespace: monitoring
+    labels:
+        app: prometheus
+    data:
+    prometheus.yml: |
+        global:
+        scrape_interval: 15s
+        evaluation_interval: 15s
+
+        scrape_configs:
+        - job_name: 'prometheus'
+            static_configs:
+            - targets: ['localhost:9090']
+    ```
+
+    > **Explanation**: This config sets the scrape interval and tells Prometheus to monitor itself.
+
+    it use as `prometheus.yml` to configure prometheus, we need to assigned this config to every pod with `deployment`
+
+2. **Deployment**
+
+    Defines the Prometheus pod, mounts the config and data volumes:
+
+    ```yml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+    name: prometheus
+    namespace: monitoring
+    spec:
+    replicas: 1
+    selector:
+        matchLabels:
+        app: prometheus
+    template:
+        metadata:
+        labels:
+            app: prometheus
+        spec:
+        containers:
+            - name: prometheus
+            image: prom/prometheus:latest
+            args:
+                - "--config.file=/etc/prometheus/prometheus.yml"
+                - "--storage.tsdb.path=/prometheus"
+                - "--storage.tsdb.retention.time=15d"
+                - "--web.enable-lifecycle"
+                - "--web.external-url=http://prometheus.dmnsn.k8s/"
+                - "--web.route-prefix=/"
+            ports:
+                - containerPort: 9090
+            volumeMounts:
+                - name: config-volume
+                mountPath: /etc/prometheus/
+                - name: data
+                mountPath: /prometheus
+        volumes:
+            - name: config-volume
+            configMap:
+                name: prometheus-config
+            - name: data
+            persistentVolumeClaim:
+                claimName: prometheus-pvc
+    ```
+
+    > **Explanation**:
+    >
+    > `config-volume` mounts the Prometheus configuration.
+    > `data` mounts the NFS-backed PVC for persistent storage.
+
+    `deployment` will tell description of pod to configure and deployed it as configured. If we need to access service you need to expose it by using `service`
+
+3. **Service**
+
+    Exposes Prometheus within the cluster:
+
+    ```yml
+    apiVersion: v1
+    kind: Service
+    metadata:
+    name: prometheus
+    namespace: monitoring
+    labels:
         app: prometheus
     spec:
-      containers:
-        - name: prometheus
-          image: prom/prometheus:latest
-          args:
-            - "--config.file=/etc/prometheus/prometheus.yml"
-            - "--storage.tsdb.path=/prometheus"
-            - "--storage.tsdb.retention.time=15d"
-            - "--web.enable-lifecycle"
-            - "--web.external-url=http://prometheus.dmnsn.k8s/"
-            - "--web.route-prefix=/"
-          ports:
-            - containerPort: 9090
-          volumeMounts:
-            - name: config-volume
-              mountPath: /etc/prometheus/
-            - name: data
-              mountPath: /prometheus
-      volumes:
-        - name: config-volume
-          configMap:
-            name: prometheus-config
-        - name: data
-          persistentVolumeClaim:
-            claimName: prometheus-pvc
-```
+    selector:
+        app: prometheus
+    type: ClusterIP
+    ports:
+        - protocol: TCP
+        port: 9090
+        targetPort: 9090
+    ```
 
-You will see script mount `config-volume` to `/etc/prometheus` that will use `prometheus-config` place file `prometheus.yml` in that path when pod created, and mounting `data` to `pvc` we're create before.
-
-`deployment` will tell description of pod to configure and deployed it as configured. If we need to access service you need to expose it by using `service`
-
-```yml
-apiVersion: v1
-kind: Service
-metadata:
-  name: prometheus
-  namespace: monitoring
-  labels:
-    app: prometheus
-spec:
-  selector:
-    app: prometheus
-  type: ClusterIP
-  ports:
-    - protocol: TCP
-      port: 9090
-      targetPort: 9090
-```
-
-`service` will tell Kubernetes know how to expose pod service for other pod in cluster and manage to work with multiple pods create with same deployment.
+    `service` will tell Kubernetes know how to expose pod service for other pod in cluster and manage to work with multiple pods create with same deployment.
 
 ## Ingress rule to access from outside
 
