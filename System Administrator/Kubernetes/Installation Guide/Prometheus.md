@@ -44,9 +44,9 @@ spec:
 
 > Note: The `namespace` field is not required for PersistentVolumes, as they are cluster-scoped resources.
 
-Then create `pvc` to claims persistant volumn for pod use:
+Then create `pvc` to claim persistent volume for pod use:
 
-Persistant Volumn Claim:
+Persistent Volume Claim:
 
 ```yml
 apiVersion: v1
