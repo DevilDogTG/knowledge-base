@@ -17,7 +17,7 @@ Check for the latest version on [MetalLB](https://metallb.io/installation/)
 to allowcate IP need to add some configure to Kubernetes cluster
 
 ```yaml
-# matllb.yaml
+# metallb.yaml
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
