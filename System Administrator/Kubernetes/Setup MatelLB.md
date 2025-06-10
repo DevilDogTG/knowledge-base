@@ -10,7 +10,7 @@ To install MetalLB, apply the manifest:
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
 ```
 
-Check for latest verion on [MatelLB](https://metallb.io/installation/)
+Check for the latest version on [MetalLB](https://metallb.io/installation/)
 
 ## Allocate IP Pool for load balancing
 
