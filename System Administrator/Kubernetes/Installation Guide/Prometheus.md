@@ -13,11 +13,11 @@ metadata:
   name: monitoring
 ```
 
-## Create Persistant Volume and Claims
+## Create Persistent Volume and Claims
 
 To store Prometheus data persistently, we use an NFS-backed PersistentVolume (PV) and PersistentVolumeClaim (PVC).
 
-Persistant Volumn:
+Persistent Volume:
 
 ```yml
 apiVersion: v1
