@@ -27,7 +27,6 @@ Update `apt` package index, install tools and pin their version
 ```shell
 sudo apt update
 sudo apt install -y kubelet kubeadm
-sudo apt-mark hold kubelet kubeadm
 ```
 
 ### Join worker node to cluster
@@ -44,4 +43,12 @@ After join just for clearify in furture you can mark node as a work by using:
 
 ```sh
 kubectl label node <node name> node-role.kubernetes.io/worker=""
+```
+
+## :information: (Optional) Install by shell script
+
+I write up bash shell script to install please try to run [This script](./scripts/setup-worker.sh)
+
+```shell
+sudo bash ./setup-worker.sh
 ```
