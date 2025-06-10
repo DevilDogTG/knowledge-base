@@ -52,3 +52,11 @@ I write up bash shell script to install please try to run [This script](./script
 ```shell
 sudo bash ./setup-worker.sh
 ```
+
+or your can run
+
+```shell
+curl https://github.com/DevilDogTG/knowledge-base/raw/refs/heads/main/System%20Administrator/Kubernetes/scripts/setup-worker.sh | sudo bash
+```
+
+To download script from GitHub and run it.
