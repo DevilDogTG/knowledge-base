@@ -34,7 +34,7 @@ metadata:
   namespace: metallb-system
 ```
 
-Apply configure to kube
+Apply the configuration to the cluster
 
 ```sh
 kubectl apply -f <your config name>.yaml
