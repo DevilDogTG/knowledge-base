@@ -98,7 +98,7 @@ We will create a ConfigMap, Deployment, and Service for Prometheus.
 
     > **Explanation**: This config sets the scrape interval and tells Prometheus to monitor itself.
 
-    it use as `prometheus.yml` to configure prometheus, we need to assigned this config to every pod with `deployment`
+    This ConfigMap provides `prometheus.yml` for Prometheus. Deploy it by mounting the ConfigMap in the pod specification of the Deployment.
 
 2. **Deployment**
 
