@@ -179,7 +179,7 @@ We will create a ConfigMap, Deployment, and Service for Prometheus.
 
 ## Ingress rule to access from outside
 
-To access application running in Kubernetes, we need to setup `ingress` rule to mapped host, path and ports to expose via load balancer, for this guide will using [MetalLB](../Setup MetalLB.md) as load balancer and using `nginx` as ingress controller
+To access an application running in Kubernetes, we need to set up an `ingress` rule to map the host, path, and ports to expose via the load balancer. This guide uses [MetalLB](../Setup MetalLB.md) as the load balancer and `nginx` as the ingress controller.
 
 ```yml
 apiVersion: networking.k8s.io/v1
