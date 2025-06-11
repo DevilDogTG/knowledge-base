@@ -175,7 +175,7 @@ We will create a ConfigMap, Deployment, and Service for Prometheus.
         targetPort: 9090
     ```
 
-    `service` will tell Kubernetes know how to expose pod service for other pod in cluster and manage to work with multiple pods create with same deployment.
+    The `Service` object in Kubernetes exposes the Prometheus pods within the cluster and ensures communication between them. It also manages load balancing across multiple pod replicas created by the same deployment.
 
 ## Ingress rule to access from outside
 
