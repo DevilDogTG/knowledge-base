@@ -208,4 +208,4 @@ Now you can access `Prometheus` via [http://prometheus.dmnsn.k8s:9090](http://pr
 
 ## :bulb: Tips
 
-- You can merge all `yaml` into 1 file by using `---` each section of script
+- You can combine all YAML manifests into a single file by separating each document with `---`.
