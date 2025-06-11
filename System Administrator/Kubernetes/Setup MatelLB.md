@@ -14,7 +14,7 @@ Check for the latest version on [MetalLB](https://metallb.io/installation/)
 
 ## Allocate IP Pool for load balancing
 
-to allowcate IP need to add some configure to Kubernetes cluster
+To allocate IPs, add the following configuration to the Kubernetes cluster:
 
 ```yaml
 # metallb.yaml
