@@ -143,5 +143,5 @@ sudo systemctl restart containerd.service
 
 You have done to prepared base of kubernetest node next should specified role to setup guide below
 
-- [Control Plane](./Setup%20Control%20Plant.md)
+- [Control Plane](./Setup%20Control%20Plane.md)
 - [Worker](Setup%20Worker%20Node.md)
