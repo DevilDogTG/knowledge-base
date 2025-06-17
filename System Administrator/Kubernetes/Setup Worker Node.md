@@ -1,4 +1,4 @@
-# Kubernetes Worker setup
+# :gear: Kubernetes Worker setup
 
 This guide has pre-required from [Kuberbnetes Setup Guide](Kubernetes%20Setup%20Guide.md) please completed it before follow this guide
 
@@ -45,7 +45,7 @@ After join just for clearify in furture you can mark node as a work by using:
 kubectl label node <node name> node-role.kubernetes.io/worker=""
 ```
 
-## :information: (Optional) Install by shell script
+## :information_source: (Optional) Install by shell script
 
 I write up bash shell script to install please try to run [This script](./scripts/setup-worker.sh)
 
