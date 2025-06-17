@@ -13,11 +13,11 @@ metadata:
   name: monitoring
 ```
 
-## Create Persistent Volume and Claims
+## Create Persistant Volume and Claims
 
 To store Prometheus data persistently, we use an NFS-backed PersistentVolume (PV) and PersistentVolumeClaim (PVC).
 
-Persistent Volume:
+Persistant Volumn:
 
 ```yml
 apiVersion: v1
@@ -98,7 +98,7 @@ We will create a ConfigMap, Deployment, and Service for Prometheus.
 
     > **Explanation**: This config sets the scrape interval and tells Prometheus to monitor itself.
 
-    This ConfigMap provides `prometheus.yml` for Prometheus. Deploy it by mounting the ConfigMap in the pod specification of the Deployment.
+This ConfigMap provides `prometheus.yml` for Prometheus. Deploy it by mounting the ConfigMap in the pod specification of the Deployment.
 
 2. **Deployment**
 
@@ -175,7 +175,7 @@ We will create a ConfigMap, Deployment, and Service for Prometheus.
         targetPort: 9090
     ```
 
-    The `Service` object in Kubernetes exposes the Prometheus pods within the cluster and ensures communication between them. It also manages load balancing across multiple pod replicas created by the same deployment.
+The `Service` object in Kubernetes exposes the Prometheus pods within the cluster and ensures communication between them. It also manages load balancing across multiple pod replicas created by the same deployment.
 
 ## Ingress rule to access from outside
 
