@@ -44,9 +44,9 @@ spec:
 
 > Note: The `namespace` field is not required for PersistentVolumes, as they are cluster-scoped resources.
 
-Then create `pvc` to claims persistant volumn for pod use:
+Then create `pvc` to claim persistent volume for pod use:
 
-Persistant Volumn Claim:
+Persistent Volume Claim:
 
 ```yml
 apiVersion: v1
@@ -98,7 +98,7 @@ We will create a ConfigMap, Deployment, and Service for Prometheus.
 
     > **Explanation**: This config sets the scrape interval and tells Prometheus to monitor itself.
 
-    it use as `prometheus.yml` to configure prometheus, we need to assigned this config to every pod with `deployment`
+This ConfigMap provides `prometheus.yml` for Prometheus. Deploy it by mounting the ConfigMap in the pod specification of the Deployment.
 
 2. **Deployment**
 
@@ -175,11 +175,11 @@ We will create a ConfigMap, Deployment, and Service for Prometheus.
         targetPort: 9090
     ```
 
-    `service` will tell Kubernetes know how to expose pod service for other pod in cluster and manage to work with multiple pods create with same deployment.
+The `Service` object in Kubernetes exposes the Prometheus pods within the cluster and ensures communication between them. It also manages load balancing across multiple pod replicas created by the same deployment.
 
 ## Ingress rule to access from outside
 
-To access application running in Kubernetes, we need to setup `ingress` rule to mapped host, path and ports to expose via load balancer, for this guide will using [MatelLB](../Setup MatelLB.md) as load balancer and using `nginx` as ingress controller
+To access an application running in Kubernetes, we need to set up an `ingress` rule to map the host, path, and ports to expose via the load balancer. This guide uses [MetalLB](../Setup MetalLB.md) as the load balancer and `nginx` as the ingress controller.
 
 ```yml
 apiVersion: networking.k8s.io/v1
@@ -208,4 +208,4 @@ Now you can access `Prometheus` via [http://prometheus.dmnsn.k8s:9090](http://pr
 
 ## :bulb: Tips
 
-- You can merge all `yaml` into 1 file by using `---` each section of script
+- You can combine all YAML manifests into a single file by separating each document with `---`.

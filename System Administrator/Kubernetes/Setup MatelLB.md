@@ -1,4 +1,4 @@
-# Setup MatelLB for load balancer
+# Setup MetalLB for load balancer
 
 [MetalLB](https://metallb.io/) is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
 
@@ -10,14 +10,14 @@ To install MetalLB, apply the manifest:
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
 ```
 
-Check for latest verion on [MatelLB](https://metallb.io/installation/)
+Check for the latest version on [MetalLB](https://metallb.io/installation/)
 
 ## Allocate IP Pool for load balancing
 
-to allowcate IP need to add some configure to Kubernetes cluster
+To allocate IPs, add the following configuration to the Kubernetes cluster:
 
 ```yaml
-# matllb.yaml
+# metallb.yaml
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
@@ -34,7 +34,7 @@ metadata:
   namespace: metallb-system
 ```
 
-Apply configure to kube
+Apply the configuration to the cluster
 
 ```sh
 kubectl apply -f <your config name>.yaml

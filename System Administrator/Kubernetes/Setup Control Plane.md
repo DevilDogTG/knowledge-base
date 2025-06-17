@@ -1,4 +1,4 @@
-# Kubernetes Control Plane setup
+# :gear: Kubernetes Control Plane setup
 
 This guide has pre-required from [Kuberbnetes Setup Guide](Kubernetes%20Setup%20Guide.md) please completed it before follow this guide
 
@@ -124,3 +124,19 @@ kubectl get pods -A
 ```
 
 This will display all pods in all namespace, all pods should be `Running` state
+
+## :information_source: (Optional) Install by shell script
+
+I write up bash shell script to install please try to run [This script](./scripts/setup-controlplane.sh)
+
+```shell
+sudo bash ./setup-controlplane.sh
+```
+
+or your can run
+
+```shell
+curl https://github.com/DevilDogTG/knowledge-base/raw/refs/heads/main/System%20Administrator/Kubernetes/scripts/setup-controlplane.sh | sudo bash
+```
+
+To download script from GitHub and run it.
