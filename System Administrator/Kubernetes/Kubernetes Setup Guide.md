@@ -1,12 +1,12 @@
 # Kubernetes Setup Guide
 
-Thisn guide refer <https://kubernetes.io/docs/setup/production-environment/> to setup production-like environment in home lab
+This guide refer <https://kubernetes.io/docs/setup/production-environment/> to setup production-like environment in home lab
 
 ## Preparation
 
 before start setup kubernetes need to preparing VMs for example use 2 VMs for Master - Worker node example spec below
 
-- **Master Node**: debain 12, 4 vCPUs, 2GB RAM, IP 192.168.0.1/24
+- **Master Node**: debian 12, 4 vCPUs, 2GB RAM, IP 192.168.0.1/24
 - **Worker Node**: debian 12, 2 vCPUs, 2GB RAM, IP 192.168.0.2/24
 
 need to fixed ip on both hosts
@@ -17,7 +17,7 @@ Kubernetes need preparation some configuration before setup, this required on al
 
 - Disabled SWAP
 - Enable `ip_forward`
-- [Optional] Endable `br_netfilter`
+- (Optional) Enable `br_netfilter`
 
 #### Disabled SWAP
 
@@ -27,11 +27,11 @@ If your system using SWAP your can disable by
 sudo swapoff -a
 ```
 
-but above command will disabled untill next restart, to disabled to remove `swap` from `/etc/fstab` is required
+but above command will disabled until next restart, to disabled to remove `swap` from `/etc/fstab` is required
 
 ```shell
 sudo nano /etc/fstab
-# Comment out or delete swap mountin file
+# Comment out or delete swap mounting file
 ```
 
 #### Enable `ip_forward`
@@ -57,7 +57,7 @@ echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-#### [Optional] Endable `br_netfilter`
+#### (Optional) Enable `br_netfilter`
 
 Like `ip_forward` but we need extra step to enable bridge modules
 
@@ -75,7 +75,7 @@ sudo sysctl -p
 
 ## Getting Started
 
-Installation is flexible and allow your to choose your favourite component but required to run kubernetes cluster. 2 thing need to choose is **Container Runtime** and **CNI** in this guide will start setup step below
+Installation is flexible and allow your to choose your favorite component but required to run kubernetes cluster. 2 thing need to choose is **Container Runtime** and **CNI** in this guide will start setup step below
 
 - Install **Container Runtime**: containerd.io
 - Select node role to Continue Setup
@@ -124,7 +124,7 @@ Find and update `SystemdCgroup` to `true`
   ...
 ```
 
-Overridin the sandbox (puase) image
+Overriding the sandbox (pause) image
 
 ```conf
 [plugins."io.containerd.grpc.v1.cri"]
@@ -133,7 +133,7 @@ Overridin the sandbox (puase) image
   ...
 ```
 
-Restart `conatinerd` to take effect
+Restart `containerd` to take effect
 
 ```shell
 sudo systemctl restart containerd.service
@@ -141,7 +141,7 @@ sudo systemctl restart containerd.service
 
 ### Select node role to Continue Setup
 
-You have done to prepared base of kubernetest node next should specified role to setup guide below
+You have done to prepared base of Kubernetes node next should specified role to setup guide below
 
 - [Control Plane](./Setup%20Control%20Plane.md)
 - [Worker](Setup%20Worker%20Node.md)
